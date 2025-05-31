@@ -1,0 +1,17 @@
+[
+    {
+        "id": 1,
+        "title": "Купить хлеб",
+        "is_completed": true,
+        "priority": 2,
+        "type": "SimpleTask"
+    },
+    {
+        "id": 2,
+        "title": "Сдать отчёт",
+        "is_completed": false,
+        "priority": 1,
+        "type": "DeadlineTask",
+        "due_date": "2025-06-14 18:00"
+    }
+]
