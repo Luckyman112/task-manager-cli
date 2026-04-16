@@ -1,5 +1,21 @@
 # Task Management System (Python)
 
+## Pitch
+A lightweight, pattern-driven command-line task manager designed to help users efficiently track simple, deadline-driven, and recurring tasks directly from the terminal.
+
+## The Problem
+Developers and power users often rely on heavy, GUI-based task managers that break their terminal workflow. They need a fast, keyboard-centric tool that handles complex task logic (like recurring intervals and deadline notifications) without leaving the command line.
+
+## The User
+Software engineers, system administrators, and terminal enthusiasts who prefer CLI tools for daily time management.
+
+## Core Features
+- [x] **Polymorphic Task Creation:** Support for Simple, Deadline, and Recurring tasks using the Factory Method.
+- [x] **Smart Notifications:** Real-time deadline alerts powered by the Observer pattern.
+- [x] **Dynamic Sorting:** Sort tasks by name, priority, or due date using the Strategy pattern.
+- [x] **Persistence:** Save and load tasks to/from a JSON file for continuous tracking.
+
+---
 ## Overview
 **Task Management System** is a simple command-line application written in Python that allows users to manage different types of tasks:
 - **Simple tasks** (`SimpleTask`)
