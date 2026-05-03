@@ -1,22 +1,22 @@
-from datetime import datetime
+from typing import List
 from models.itask import ITask
 from factories.task_factory import TaskFactory
 from models.notification import NotificationPublisher
 from models.console_subscriber import ConsoleSubscriber
+from strategies.isort_strategy import ISortStrategy
 from strategies.sort_by_name import SortByName
 
 class TaskManager:
     def __init__(self):
-        self._tasks: list[ITask] = []
-        self._next_id = 1
-
+        self._tasks: List[ITask] = []
+        
         self._publisher = NotificationPublisher()
         self._console_sub = ConsoleSubscriber()
         self._publisher.subscribe(self._console_sub)
 
-        self._sort_strategy = SortByName()
+        self._sort_strategy: ISortStrategy = SortByName()
 
-    def set_sort_strategy(self, strategy) -> None:
+    def set_sort_strategy(self, strategy: ISortStrategy) -> None:
         self._sort_strategy = strategy
 
     def add_task(self, task: ITask) -> None:
@@ -36,8 +36,11 @@ class TaskManager:
                 return True
         return False
 
+    def get_all_tasks(self) -> List[ITask]:
+        return self._sort_strategy.sort(self._tasks)
+
     def list_tasks(self) -> None:
-        sorted_list = self._sort_strategy.sort(self._tasks)
+        sorted_list = self.get_all_tasks()
         print("\n---- All Tasks ----")
         for t in sorted_list:
             print(t.get_info())
