@@ -1,4 +1,5 @@
 import streamlit as st
+import datetime
 from task_manager import TaskManager
 from factories.task_factory import TaskFactory
 from strategies.sort_by_name import SortByName
@@ -13,14 +14,38 @@ st.set_page_config(page_title="AI-Native Task Manager", layout="wide")
 
 with st.sidebar:
     st.header("➕ Create New Task")
+    
+    task_type = st.selectbox("Task Type", ["simple", "deadline", "recurring"])
+    
     with st.form("add_task_form", clear_on_submit=True):
         title = st.text_input("Task Title")
-        task_type = st.selectbox("Task Type", ["simple", "recurring", "deadline"])
-        priority = st.select_slider("Priority", options=["Low", "Medium", "High"])
+        desc = st.text_input("Description (Optional)")
+        priority_str = st.select_slider("Priority", options=["Low", "Medium", "High"], value="Medium")
+        
+        priority_map = {"High": 1, "Medium": 2, "Low": 3}
+        priority = priority_map[priority_str]
+        
+        extra_kwargs = {}
+        
+        if task_type == "deadline":
+            due_date = st.date_input("Due Date", datetime.date.today())
+            due_time = st.time_input("Due Time", datetime.time(12, 0))
+            extra_kwargs["due_date"] = datetime.datetime.combine(due_date, due_time)
+            
+        elif task_type == "recurring":
+            extra_kwargs["interval_days"] = st.number_input("Interval (Days)", min_value=1, value=1, step=1)
+            next_run_date = st.date_input("Next Run Date", datetime.date.today())
+            extra_kwargs["next_run"] = datetime.datetime.combine(next_run_date, datetime.time.min)
         
         if st.form_submit_button("Add Task"):
             if title:
-                new_task = TaskFactory.create_task(task_type, title=title, priority=priority)
+                new_task = TaskFactory.create_task(
+                    task_type, 
+                    title=title, 
+                    description=desc, 
+                    priority=priority, 
+                    **extra_kwargs
+                )
                 tm.add_task(new_task)
                 st.success(f"Task '{title}' added!")
                 st.rerun()
